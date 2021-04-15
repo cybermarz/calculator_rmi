@@ -15,10 +15,10 @@ This repository contains the implementation of simple calculator using Java RMI.
 ### Snapshots
 
 
-![alt text](https://github.com/smfarjad/Java-RMI-Simple-Calculator/blob/media/snap1.jpg?raw=true)
+![alt text](../media/snap1.jpg?raw=true)
 
 
-![alt text](https://github.com/smfarjad/Java-RMI-Simple-Calculator/blob/media/snap2.jpg?raw=true)
+![alt text](../media/snap2.jpg?raw=true)
 
 
 
