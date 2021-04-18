@@ -11,58 +11,35 @@ UnicastRemoteObject implements Calculator {
             return "ok";
         }
         else{
-            return "Negative operand!";
+            return "Negative operanddddd!";
         }
     }
 
     public String calculate(char op, int x, int y){
-        switch(op)
-        {
-            case '+':
-                return addition(x,y);
-            case '-':
-                return subtraction(x,y);
-            case '*':
-                return multiplication(x,y);
-            case '/':
-                return division(x,y);
-            default:
-                return "Wrong operator!";
+        String str;
+        if((str = checkOperand(x,y)) != "ok"){
+            return str;
+        }
+        else {
+            switch (op) {
+                case '+':
+                    return String.valueOf(x + y);
+                case '-':
+                    return String.valueOf(x - y);
+                case '*':
+                    return String.valueOf(x * y);
+                case '/':
+                    return String.valueOf(x / y);
+                default:
+                    return "0";
+            }
         }
     }
 
-    public String addition(int x, int y){
-        String result;
-        result = String.valueOf(x+y);
-        return result;
-    }
-
-    public String subtraction(int x, int y){
-        String result;
-        result = String.valueOf(x-y);
-        return result;
-    }
-
-    public String multiplication(int x, int y){
-        String result;
-        result = String.valueOf(x*y);
-        return result;
-    }
-
-    public String division(int x, int y){
-        String result;
-        if(y == 0){
-            result = "Math Error! Division by zero";
-        }
-        else{
-            result = String.valueOf(x/y);
-        }
-        return result;
-    }
 
     public String checkResult(String result){
         if(result.contains("-")){
-            return "Negative result";
+            return "Negative result!";
         }
         else if(result.contains(".")){
             return "Fractional result!";
@@ -71,6 +48,5 @@ UnicastRemoteObject implements Calculator {
             return result;
         }
     }
-
 }
 
