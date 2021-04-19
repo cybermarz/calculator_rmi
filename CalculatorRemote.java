@@ -6,21 +6,24 @@ UnicastRemoteObject implements Calculator {
     CalculatorRemote() throws RemoteException{
     super(); }
 
-    public String checkOperand(int x, int y){
-        if(x >= 0 && y >= 0){
-            return "ok";
+    public boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
         }
-        else{
-            return "Negative operanddddd!";
+    }
+
+    public String checkOperand(String x, String y){
+        if(isNumeric(x) && isNumeric(y)){
+            return "";
+        } else {
+            return "Invalid input!";
         }
     }
 
     public String calculate(char op, int x, int y){
-        String str;
-        if((str = checkOperand(x,y)) != "ok"){
-            return str;
-        }
-        else {
             switch (op) {
                 case '+':
                     return String.valueOf(x + y);
@@ -29,23 +32,28 @@ UnicastRemoteObject implements Calculator {
                 case '*':
                     return String.valueOf(x * y);
                 case '/':
-                    return String.valueOf(x / y);
+                    if(y == 0){
+                        return "Division by zero!";
+                    } else if(x % y != 0) {
+                        return "Fractional result!";
+                    } else {
+                        return String.valueOf(x / y);
+                    }
                 default:
                     return "0";
             }
         }
-    }
 
 
     public String checkResult(String result){
-        if(result.contains("-")){
-            return "Negative result!";
-        }
-        else if(result.contains(".")){
-            return "Fractional result!";
-        }
-        else{
+        if (result.equals("Fractional result!") || result.equals("Division by zero!")){
             return result;
+        } else if(result.length() > 8){
+            return "Large number!";
+        } else if (Integer.parseInt(result) < 0) {
+            return "Negative result";
+        } else {
+            return "";
         }
     }
 }

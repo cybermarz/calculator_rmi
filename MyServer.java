@@ -7,7 +7,8 @@ public class MyServer{
 
         try{
             Calculator stub= new CalculatorRemote();
-            Naming.rebind("rmi://localhost:5001/calculator",stub);
+            String port = args[0];
+            Naming.rebind("rmi://localhost:"+port+"/calculator",stub);
         }catch(Exception e){
             System.out.println("Server exception: " + e);
         }

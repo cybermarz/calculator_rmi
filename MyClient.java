@@ -1,6 +1,4 @@
 import java.rmi.*;
-import java.util.InputMismatchException;
-import java.util.Scanner;   //for taking input from the user
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -130,16 +128,11 @@ public class MyClient implements ActionListener {
 
     }
 
-    public class LargeNumberException extends Exception {
-        public LargeNumberException(String message) {
-            super(message);
-        }
-    }
-
     public static void main(String args[]) {
 
         try {
-            Calculator stub = (Calculator) Naming.lookup("rmi://localhost:5001/calculator");
+            String port = args[0];
+            Calculator stub = (Calculator) Naming.lookup("rmi://localhost:"+port+"/calculator");
             MyClient calc = new MyClient(stub);
         } catch (Exception e) {
             System.out.println("Client exception: " + e);
@@ -152,9 +145,9 @@ public class MyClient implements ActionListener {
         for (int i = 0; i < 10; i++) {
             if (e.getSource() == numberButtons[i]) {
                 String str = textfield.getText();
-                if (str.equals("0") || (errorMessage != "")) {
+                if (str.equals("0") || str.equals(result)
+                        || (!errorMessage.equals(""))) {
                     errorMessage = "";
-                    num1 = "";
                     textfield.setText(String.valueOf(i));
                 } else {
                     if(str.length() < 9) {
@@ -164,74 +157,72 @@ public class MyClient implements ActionListener {
             }
         }
         if (e.getSource() == addButton) {
-            if (errorMessage == "") {
-                if (operator == '?') {
-                    num1 = textfield.getText();
+            if (errorMessage.equals("")) {
+                String str = textfield.getText();
+                if (!str.equals("")) {
+                    num1 = str;
                 }
                 operator = '+';
                 textfield.setText("");
             }
         }
         if (e.getSource() == subButton) {
-            if (errorMessage == "") {
-                if (operator == '?') {
-                    num1 = textfield.getText();
+            if (errorMessage.equals("")) {
+                String str = textfield.getText();
+                if (!str.equals("")) {
+                    num1 = str;
                 }
                 operator = '-';
                 textfield.setText("");
             }
         }
         if (e.getSource() == mulButton) {
-            if (errorMessage == "") {
-                if (operator == '?') {
-                    num1 = textfield.getText();
+            if (errorMessage.equals("")) {
+                String str = textfield.getText();
+                if (!str.equals("")) {
+                    num1 = str;
                 }
                 operator = '*';
                 textfield.setText("");
             }
         }
         if (e.getSource() == divButton) {
-            if (errorMessage == "") {
-                if (operator == '?') {
-                    num1 = textfield.getText();
+            if (errorMessage.equals("")) {
+                String str = textfield.getText();
+                if (!str.equals("")) {
+                    num1 = str;
                 }
                 operator = '/';
                 textfield.setText("");
             }
         }
         if (e.getSource() == equButton) {
-            if (errorMessage == "") {
+            if (errorMessage.equals("") && !textfield.getText().equals("")) {
                 num2 = textfield.getText();
-                try {
-                    result = stub.calculate(operator, Integer.parseInt(num1), Integer.parseInt(num2));
+                if(operator == '?'){
+                    result = num2;
+                    textfield.setText(result);
+                    num1 = result;
+                } else {
+                    try {
+                        errorMessage = stub.checkOperand(num1, num2);
+                        if (errorMessage.equals("")) {
+                            result = stub.calculate(operator, Integer.parseInt(num1), Integer.parseInt(num2));
 
+                            errorMessage = stub.checkResult(result);
+                        }
+                        if (errorMessage.equals("")) {
+                            textfield.setText(result);
+                            num1 = result;
+                        } else {
+                            textfield.setText(errorMessage);
+                        }
+                        num2 = "";
+                        operator = '?';
 
-                    if(result.length() > 8){
-                        throw new LargeNumberException("Large number");
-                    } else if (Integer.parseInt(result) < 0) {
-                        throw new IllegalArgumentException("Negativ result");
-                    } else {
-                        textfield.setText(result);
-                        num1 = result;
+                    } catch (RemoteException ex) {
+                        System.out.println("Remote exception: " + ex);
                     }
-
-
-                } catch (RemoteException ex) {
-                    System.out.println("Remote exception: " + ex);
-                } catch (NumberFormatException ex) {
-                    errorMessage = "Invalid input!";
-                    textfield.setText(errorMessage);
-                } catch (ArithmeticException ex) {
-                    errorMessage = "Division by zero!";
-                    textfield.setText(errorMessage);
-                } catch (IllegalArgumentException ex) {
-                    errorMessage = "Negativ result!";
-                    textfield.setText(errorMessage);
-                } catch (LargeNumberException ex) {
-                    errorMessage = "Large number!";
-                    textfield.setText(errorMessage);
-                } finally {
-                    operator = '?';
                 }
             }
         }
@@ -245,7 +236,7 @@ public class MyClient implements ActionListener {
         if (e.getSource() == delButton) {
             String str = textfield.getText();
             textfield.setText("");
-            if (errorMessage == "") {
+            if (errorMessage.equals("")) {
                 for (int i = 0; i < str.length() - 1; i++) {
                     textfield.setText(textfield.getText() + str.charAt(i));
                 }
