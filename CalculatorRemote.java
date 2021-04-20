@@ -2,23 +2,18 @@ import java.rmi.*;
 import java.rmi.server.*;
 
 public class CalculatorRemote extends
-UnicastRemoteObject implements Calculator {
-    CalculatorRemote() throws RemoteException{
-    super(); }
+    UnicastRemoteObject implements Calculator {
 
-    public boolean isNumeric(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch(NumberFormatException e){
-            return false;
-        }
+    CalculatorRemote() throws RemoteException {
+        super(); 
     }
 
-    public String checkOperand(String x, String y){
-        if(isNumeric(x) && isNumeric(y)){
+    public String checkOperand(String x, String y) {
+        try {
+            Double.parseDouble(x);
+            Double.parseDouble(y);
             return "";
-        } else {
+        } catch(NumberFormatException e) {
             return "Invalid input!";
         }
     }
