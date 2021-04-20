@@ -24,25 +24,25 @@ UnicastRemoteObject implements Calculator {
     }
 
     public String calculate(char op, int x, int y){
-            switch (op) {
-                case '+':
-                    return String.valueOf(x + y);
-                case '-':
-                    return String.valueOf(x - y);
-                case '*':
-                    return String.valueOf(x * y);
-                case '/':
-                    if(y == 0){
-                        return "Division by zero!";
-                    } else if(x % y != 0) {
-                        return "Fractional result!";
-                    } else {
-                        return String.valueOf(x / y);
-                    }
-                default:
-                    return "0";
-            }
+        switch (op) {
+            case '+':
+                return String.valueOf(x + y);
+            case '-':
+                return String.valueOf(x - y);
+            case '*':
+                return String.valueOf(x * y);
+            case '/':
+                if(y == 0){
+                    return "Division by zero!";
+                } else if(x % y != 0) {
+                    return "Fractional result!";
+                } else {
+                    return String.valueOf(x / y);
+                }
+            default:
+                return "0";
         }
+    }
 
 
     public String checkResult(String result){
