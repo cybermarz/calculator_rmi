@@ -129,11 +129,25 @@ public class MyClient implements ActionListener {
     }
 
     public static void main(String args[]) {
-
         try {
-            String port = args[0];
+
+            //Checking if port is default or specified by user:
+
+            String port;
+            if(args.length == 0){
+                port = "1099";
+            } else {
+                port = args[0];
+            }
+
+            // Finding the stub:
+
             Calculator stub = (Calculator) Naming.lookup("rmi://localhost:"+port+"/calculator");
+
+            // Calling the class with GUI:
+
             MyClient calc = new MyClient(stub);
+
         } catch (Exception e) {
             System.out.println("Client exception: " + e);
         }
@@ -142,20 +156,34 @@ public class MyClient implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        // If we press one of the number buttons (from 0 to 9):
+
         for (int i = 0; i < 10; i++) {
             if (e.getSource() == numberButtons[i]) {
                 String str = textfield.getText();
+
+                // Cases when we have to refresh the textfield:
+
                 if (str.equals("0") || str.equals(result)
                         || (!errorMessage.equals(""))) {
                     errorMessage = "";
                     textfield.setText(String.valueOf(i));
-                } else {
+                }
+
+                // Or adding digit to the textfield and verifying input does not exceed int value
+
+                else {
                     if(str.length() < 9) {
                         textfield.setText(str.concat(String.valueOf(i)));
                     }
                 }
             }
         }
+
+        //If we press one of the 4 operations buttons (+,-,*,/):
+        // If we have error message in the textfield then these buttons are blocked.
+        // We also can easily switch between operations before entering second number.
+
         if (e.getSource() == addButton) {
             if (errorMessage.equals("")) {
                 String str = textfield.getText();
@@ -196,27 +224,47 @@ public class MyClient implements ActionListener {
                 textfield.setText("");
             }
         }
+
+        // If we press '=' button:
+
         if (e.getSource() == equButton) {
             if (errorMessage.equals("") && !textfield.getText().equals("")) {
                 num2 = textfield.getText();
-                if(operator == '?'){
+
+                // Handling case "value equals to itself", like 9 = 9:
+
+                if (operator == '?') {
                     result = num2;
                     textfield.setText(result);
                     num1 = result;
-                } else {
+                }
+
+                else {
                     try {
+                        // Checking input
+
                         errorMessage = stub.checkOperand(num1, num2);
+
+                        // If input is okay, trying to calculate the result:
+
                         if (errorMessage.equals("")) {
                             result = stub.calculate(operator, Integer.parseInt(num1), Integer.parseInt(num2));
-
                             errorMessage = stub.checkResult(result);
                         }
+
+                        // Printing the result:
+
                         if (errorMessage.equals("")) {
                             textfield.setText(result);
                             num1 = result;
-                        } else {
+                        }
+
+                        // Or printing error message:
+
+                        else {
                             textfield.setText(errorMessage);
                         }
+
                         num2 = "";
                         operator = '?';
 
@@ -226,6 +274,9 @@ public class MyClient implements ActionListener {
                 }
             }
         }
+
+        // If we press "clear" button, we clear everything:
+
         if (e.getSource() == clrButton) {
             textfield.setText("");
             num1 = "";
@@ -233,6 +284,9 @@ public class MyClient implements ActionListener {
             operator = '?';
             errorMessage = "";
         }
+
+        // If we press "delete" button, we delete the last element from the textfield:
+
         if (e.getSource() == delButton) {
             String str = textfield.getText();
             textfield.setText("");
