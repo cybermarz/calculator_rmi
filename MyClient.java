@@ -7,29 +7,33 @@ import javax.swing.border.LineBorder;
 public class MyClient implements ActionListener {
     JFrame frame;
     JTextField textfield;
+    JPanel panel;
     JButton[] numberButtons = new JButton[10];
     JButton[] functionButtons = new JButton[7];
     JButton addButton, subButton, mulButton, divButton;
     JButton equButton, delButton, clrButton;
-    JPanel panel;
     Calculator stub;
-
+    
+    // Custom font
     Font myFont = new Font(Font.SANS_SERIF, Font.BOLD, 30);
 
     String num1 = "", num2 = "", result = "", errorMessage = "";
     char operator = '?';
 
     MyClient(Calculator stub) {
+        //stub can be seen
         this.stub = stub;
-
+        
+        // Pop-up window
         frame = new JFrame("Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(420, 550);
         frame.setLayout(null);
 
-        //Colors
+        // Background color
         frame.getContentPane().setBackground(new Color(233, 126, 127));
-
+        
+        // Screen
         textfield = new JTextField();
         textfield.setBounds(50, 25, 300, 50);
         textfield.setFont(myFont);
@@ -37,7 +41,8 @@ public class MyClient implements ActionListener {
         textfield.setBackground(new Color(86, 86, 90));
         textfield.setForeground(new Color(0, 0, 0));
         textfield.setBorder(new LineBorder(new Color(233, 126, 127)));
-
+        
+        // Operator Buttons
         addButton = new JButton("+");
         subButton = new JButton("-");
         mulButton = new JButton("*");
@@ -45,7 +50,8 @@ public class MyClient implements ActionListener {
         equButton = new JButton("=");
         delButton = new JButton("Del");
         clrButton = new JButton("Clr");
-
+        
+        // Background, Foreground & Border of Operator Buttons
         addButton.setForeground(new Color(255, 255, 255));
         addButton.setBackground(new Color(233, 126, 127));
         addButton.setBorder(new LineBorder(Color.BLACK));
@@ -67,7 +73,8 @@ public class MyClient implements ActionListener {
         clrButton.setForeground(new Color(255, 255, 255));
         clrButton.setBackground(new Color(233, 126, 127));
         clrButton.setBorder(new LineBorder(Color.BLACK));
-
+        
+        // Array of operator buttons
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
         functionButtons[2] = mulButton;
@@ -75,7 +82,8 @@ public class MyClient implements ActionListener {
         functionButtons[4] = equButton;
         functionButtons[5] = delButton;
         functionButtons[6] = clrButton;
-
+        
+        // Operatators
         for (int i = 0; i < 7; i++) {
             functionButtons[i].addActionListener(this);
             functionButtons[i].setFont(myFont);
@@ -84,7 +92,7 @@ public class MyClient implements ActionListener {
             functionButtons[i].setBackground(new Color(233, 126, 127));
             functionButtons[i].setBorder(new LineBorder(Color.BLACK));
         }
-
+        // Numbers
         for (int i = 0; i < 10; i++) {
             numberButtons[i] = new JButton(String.valueOf(i));
             numberButtons[i].addActionListener(this);
@@ -94,10 +102,11 @@ public class MyClient implements ActionListener {
             numberButtons[i].setBackground(new Color(233, 126, 127));
             numberButtons[i].setBorder(new LineBorder(Color.BLACK));
         }
-
+        // Place del & clr buttons
         delButton.setBounds(150, 430, 100, 50);
         clrButton.setBounds(250, 430, 100, 50);
-
+        
+        // Panel (from screen to del button)
         panel = new JPanel();
         panel.setBounds(50, 100, 300, 300);
         panel.setLayout(new GridLayout(4, 4, 10, 10));
@@ -118,7 +127,8 @@ public class MyClient implements ActionListener {
         panel.add(numberButtons[0]);
         panel.add(equButton);
         panel.add(divButton);
-
+        
+        // Frames 
         frame.add(panel);
         frame.add(delButton);
         frame.add(clrButton);
