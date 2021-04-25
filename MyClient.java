@@ -83,7 +83,7 @@ public class MyClient implements ActionListener {
         functionButtons[5] = delButton;
         functionButtons[6] = clrButton;
         
-        // Operatators
+        // Operators
         for (int i = 0; i < 7; i++) {
             functionButtons[i].addActionListener(this);
             functionButtons[i].setFont(myFont);
